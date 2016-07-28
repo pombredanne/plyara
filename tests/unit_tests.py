@@ -44,6 +44,7 @@ class TestYaraRules(unittest.TestCase):
     rule ThirdRule {condition: uint32(0) == 0xE011CFD0}
     '''
 
+    interp.ParserInterpreter.rules = []
     result = interp.parseString(inputString, isPrintDebug=False)
 
     self.assertEqual(len(result), 3)
@@ -76,9 +77,10 @@ class TestYaraRules(unittest.TestCase):
 
     '''
 
+    interp.ParserInterpreter.rules = []
     result = interp.parseString(inputStringNIS, isPrintDebug=False)
 
-    self.assertEqual(len(result), 10)
+    self.assertEqual(len(result), 7)
 
     for rule in result:
       rule_name = rule["rule_name"]
@@ -114,6 +116,7 @@ class TestYaraRules(unittest.TestCase):
 
     '''
 
+    interp.ParserInterpreter.rules = []
     result = interp.parseString(inputTags, isPrintDebug=False)
 
     for rule in result:
@@ -123,6 +126,36 @@ class TestYaraRules(unittest.TestCase):
       if rule_name == 'twelve':
         self.assertTrue(len(rule['tags']) == 2 and
                         'tag1' in rule['tags'] and 'tag2' in rule['tags'])
+
+  def test_empty_string(self):
+
+    inputTags = r'''
+
+    rule thirteen
+    {
+    meta:
+    my_identifier_1 = ""
+    my_identifier_2 = 24
+    my_identifier_3 = true
+
+    strings:
+        $my_text_string = "text here"
+        $my_hex_string = { E2 34 A1 C8 23 FB }
+
+    condition:
+        $my_text_string or $my_hex_string
+    }
+
+    '''
+
+    interp.ParserInterpreter.rules = []
+    result = interp.parseString(inputTags, isPrintDebug=False)
+
+    for rule in result:
+      rule_name = rule["rule_name"]
+      if rule_name == 'thirteen':
+        self.assertTrue(len(rule['metadata']) == 3 )
+
 
 
   def test_plyara_script(self):
