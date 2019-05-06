@@ -1,5 +1,9 @@
-plyara
+plyara (DEPRECATED)
 ======
+
+# NOTE: THIS PROJECT HAS MOVED TO PLYARA/PLYARA
+## Please go to https://github.com/plyara/plyara
+## Thank you folks who found this useful and carried it forward.
 
 tl;dr: Parse Yara rules into a dictionary representation.
 
